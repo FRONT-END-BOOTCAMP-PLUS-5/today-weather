@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React from 'react'
 import KakaoTalkLoginBtn from './KakaoTalkLoginBtn';
 import Modal from './Modal';
 
@@ -9,21 +9,12 @@ interface KakaoLoginModalContainerProps {
 }
 
 const KakaoLoginModalContainer: React.FC<KakaoLoginModalContainerProps> = ({ onLogin }) => {
-    const [isOpen, setIsOpen] = useState(true);
-    
     return (
-        <>
-            {isOpen && (
-                <>
-                    <Modal 
-                        text="로그인 하시면<br />더 많은 기능을 이용하실 수 있어요." 
-                        btn={<KakaoTalkLoginBtn onClick={onLogin} />} 
-                        onClose={() => setIsOpen(false)}
-                    />
-                    <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50" />
-                </>
-            )}
-        </>
+        <Modal 
+            text="로그인 하시면<br />더 많은 기능을 이용하실 수 있어요." 
+            btn={<KakaoTalkLoginBtn onClick={onLogin} />} 
+            onClose={() => console.log('Login modal closed')}
+        />
     )
 }
 
