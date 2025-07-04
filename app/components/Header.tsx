@@ -1,4 +1,5 @@
-import { useRouter } from 'next/router';
+'use client';
+import { useRouter } from 'next/navigation';
 interface HeaderProps {
   leftVisible?: boolean;
   rightVisible?: boolean;
@@ -7,7 +8,7 @@ interface HeaderProps {
 export default function Header({ leftVisible = false, rightVisible = false }: HeaderProps) {
   const router = useRouter();
   return (
-    <div className="w-100 pt-[16px] py-[16px] pl-[20px] pr-[20px] bg-white inline-flex justify-between items-center">
+    <div className="w-full pt-[16px] py-[16px] pl-[20px] pr-[20px] bg-white inline-flex justify-between items-center">
       <button className="w-[24px] h-[24px] flex items-center justify-center" onClick={router.back}>
         {leftVisible && <img src="/assets/icons/back.svg" alt="뒤로가기" />}
       </button>
