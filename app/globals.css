@@ -2,6 +2,7 @@
 :root {
   --background: #ffffff;
   --foreground: #202020;
+  --1rem: 1rem;
 }
 
 @layer base {
