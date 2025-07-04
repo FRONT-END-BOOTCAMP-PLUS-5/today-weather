@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 interface HeaderProps {
   leftVisible?: boolean;
   rightVisible?: boolean;
-  navigateTo?: string;
 }
 
 export default function Header({ leftVisible = false, rightVisible = false }: HeaderProps) {
