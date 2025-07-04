@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useState } from 'react'
 import Modal from './Modal';
 import { Button } from './Button';
 
@@ -9,16 +9,22 @@ interface DeletePostModalContainerProps {
 }
 
 const DeletePostModalContainer: React.FC<DeletePostModalContainerProps> = ({ onDelete }) => {
+    const [isOpen, setIsOpen] = useState(true);
+
     return (
         <>
-            <Modal 
-                text="삭제 이후 되돌릴 수 없습니다.<br />삭제하시겠습니까?" 
-                btn={<Button content="삭제하기" big={false} onClick={onDelete} />} 
-                onClose={() => {}}
-            />
-            <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50" />
+            {isOpen && (
+                <>
+                    <Modal 
+                        text="삭제 이후 되돌릴 수 없습니다.<br />삭제하시겠습니까?" 
+                        btn={<Button content="삭제하기" big={false} onClick={onDelete} />} 
+                        onClose={() => setIsOpen(false)}
+                    />
+                    <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50" />
+                </>
+            )}
         </>
-    )
+    );
 }
 
 export default DeletePostModalContainer;
