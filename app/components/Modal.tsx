@@ -1,10 +1,9 @@
 "use client"
 
 import CloseIcon from '@/public/assets/icons/close.svg';
-
 import React from 'react'
 
-const Modal = (props: { btn: React.ReactNode, text: string }) => {
+const Modal: React.FC<{ btn: React.ReactNode, text: string }> = ({ btn, text }) => {
     //   const [isOpen, setIsOpen] = useState(false)
 
     //   const handleClick = () => {}
@@ -17,9 +16,12 @@ const Modal = (props: { btn: React.ReactNode, text: string }) => {
                 </div>
                 <div className="flex flex-col justify-start items-center gap-[35px]">
                     <div className="w-[212px] h-[48px] relative">
-                        <div className="text-[var(--black,#202020)] text-center font-[Pretendard] text-base font-medium leading-6 tracking-[-0.32px]">{props.text}</div>
+                        <div 
+                            className="text-[var(--black,#202020)] text-center font-[Pretendard] text-base font-medium leading-6 tracking-[-0.32px]"
+                            dangerouslySetInnerHTML={{ __html: text.replace(/\n/g, '<br />') }}
+                        />
                     </div>
-                    {props.btn}
+                    {btn}
                 </div>
             </div>
             
