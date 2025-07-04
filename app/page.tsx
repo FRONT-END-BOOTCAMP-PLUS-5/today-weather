@@ -19,8 +19,8 @@ export default function Home() {
   return (
     <>
       {/* <DeletePostModalContainer onDelete={onDelete} /> */}
-      {/* <KakaoLoginModalContainer onLogin={onLogin} /> */}
-      <UnenrollModalContainer onUnenroll={onUnenroll} />
+      <KakaoLoginModalContainer onLogin={onLogin} />
+      {/* <UnenrollModalContainer onUnenroll={onUnenroll} /> */}
     </>
   );
 }
