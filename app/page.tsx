@@ -1,12 +1,11 @@
-import Modal from "./components/Modal";
+import KakaoLoginModalContainer from "./components/KakaoLoginModalContainer";
+import UnenrollModalContainer from "./components/UnenrollModalContainer";
 
 export default function Home() {
   return (
-    <div>
-      <Modal>
-        <div>Hello</div>
-      </Modal>
-      <div className="text-base" >fff</div>
+    <div className="bg-white h-full w-full">
+      {/* <KakaoLoginModalContainer /> */}
+      <UnenrollModalContainer />
     </div>
   );
 }
