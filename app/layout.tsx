@@ -10,7 +10,10 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: '옷늘날씨',
-  description: '기온별 옷차림 추천 커뮤니티',
+  description: '기온별 옷차림 공유 커뮤니티',
+  icons: {
+    icon: '/assets/icons/icon_logo.svg',
+  },
 };
 
 export default function RootLayout({
@@ -20,7 +23,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={pretendard.className}>{children}</body>
+      <body
+        className={`${pretendard.className} bg-white flex flex-col h-full items-center justify-between overflow-y-auto`}
+      >
+        {children}
+      </body>
     </html>
   );
 }
