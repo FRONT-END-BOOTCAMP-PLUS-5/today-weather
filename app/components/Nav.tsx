@@ -10,8 +10,8 @@ const Nav: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const isOOTDActive = pathname === '/test';
-  const isMyActive = pathname === '/my';
+  const isOOTDActive = pathname === '/ootd';
+  const isMyActive = pathname === '/mypage';
   const isHomeActive = pathname === '/' || (!isOOTDActive && !isMyActive);
 
   return (
@@ -19,7 +19,7 @@ const Nav: React.FC = () => {
       <div className="flex justify-around items-center h-full">
 
         <button
-          onClick={() => router.push('/test')}
+          onClick={() => router.push('/ootd')}
           className="flex flex-col justify-center items-center text-sm w-[53px] h-[48px]"
         >
           <OOTD width={28} height={24} fill={isOOTDActive ? '#6A71E5' : 'white'} />
@@ -35,7 +35,7 @@ const Nav: React.FC = () => {
         </button>
 
         <button
-          onClick={() => router.push('/my')}
+          onClick={() => router.push('/mypage')}
           className="flex flex-col justify-center items-center text-sm w-[53px] h-[48px]"
         >
           <MY width={20} height={24} fill={isMyActive ? '#6A71E5' : 'white'} />
