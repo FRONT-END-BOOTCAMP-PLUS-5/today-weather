@@ -6,7 +6,6 @@ interface ButtonProps {
   big?: boolean;
   content: string;
   disabled?: boolean;
-  more?: boolean;
   onClick?: () => void;
 }
 
