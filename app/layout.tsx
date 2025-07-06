@@ -27,7 +27,8 @@ export default function RootLayout({
       <body
         className={`${pretendard.className} bg-white flex flex-col h-full items-center justify-between overflow-y-auto`}
       >
-        {children}
+        <main>{children}</main>
+        <Nav />
       </body>
     </html>
   );

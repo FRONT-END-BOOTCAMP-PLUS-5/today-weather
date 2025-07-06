@@ -2,5 +2,5 @@
 
 //ootd detail
 export default function OotdDetail() {
-  return <>1</>;
+  return <></>;
 }
