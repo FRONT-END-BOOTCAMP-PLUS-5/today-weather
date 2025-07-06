@@ -17,7 +17,7 @@ const Nav: React.FC<NavProps> = ({ className = '' }) => {
   const router = useRouter();
 
   const isOOTDActive = pathname === '/ootd';
-  const isMyActive = pathname === '/mypage';
+  const isMyActive = pathname === '/my';
   const isHomeActive = pathname === '/' || (!isOOTDActive && !isMyActive);
 
   return (
@@ -41,7 +41,7 @@ const Nav: React.FC<NavProps> = ({ className = '' }) => {
         </button>
 
         <button
-          onClick={() => router.push('/mypage')}
+          onClick={() => router.push('/my')}
           className="flex flex-col justify-center items-center text-sm w-[53px] h-[48px]"
         >
           <MY width={20} height={24} fill={isMyActive ? '#6A71E5' : 'white'} />
