@@ -10,10 +10,6 @@ const Nav: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const hideNabar = pathname.startsWith('oodt/wirte');
-
-  if (hideNabar) return null;
-
   const isOOTDActive = pathname === '/ootd';
   const isMyActive = pathname === '/mypage';
   const isHomeActive = pathname === '/' || (!isOOTDActive && !isMyActive);
