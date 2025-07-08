@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
     if (!token) {
       const url = request.nextUrl.clone();
       url.pathname = '/';
-      url.searchParams.set('loginRequired', '1');
+      url.searchParams.set('login', '1');
       return NextResponse.redirect(url);
     }
   }
