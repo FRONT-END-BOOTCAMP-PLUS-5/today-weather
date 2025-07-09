@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
-const api = axios.create({
+const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
   timeout: 5000,
   headers: {
@@ -9,7 +9,7 @@ const api = axios.create({
 });
 
 // 요청
-api.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   (config) => {
     // 토큰이 있으면 헤더에 추가
     const token = localStorage.getItem('auth-token');
@@ -24,7 +24,7 @@ api.interceptors.request.use(
 );
 
 // 응답
-api.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
   },
@@ -45,4 +45,4 @@ api.interceptors.response.use(
   },
 );
 
-export default api;
+export default axiosInstance;
