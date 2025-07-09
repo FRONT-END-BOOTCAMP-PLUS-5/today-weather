@@ -12,24 +12,20 @@ jobs:
     environment: OOTD
 
     steps:
-      
-name: 📥 Checkout repository
-      uses: actions/checkout@v4
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
 
-      
-name: ⚙️ Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: 'yarn'
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
 
-      
-name: 📦 Install dependencies
-      run: yarn install --frozen-lockfile
+      - name: 📦 Install dependencies
+        run: yarn install --frozen-lockfile
 
-      
-name: 🛠️ Build project
-      env:
-        NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-      run: yarn build
+      - name: 🛠️ Build project
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        run: yarn build
