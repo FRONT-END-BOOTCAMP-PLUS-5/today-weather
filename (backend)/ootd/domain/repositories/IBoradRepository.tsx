@@ -1,4 +1,4 @@
-import Board from '../entities/Borad';
+import Board from '../entities/Board';
 
 interface IBoardRepository {
   getAll(): Promise<Board[]>;
