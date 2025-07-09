@@ -4,6 +4,7 @@
 import { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { kakaoLogin } from '@/app/api/auth';
+import { KakaoTalkLoginBtn, Modal } from '@/app/components';
 
 export default function KakaoCallbackPage() {
   const searchParams = useSearchParams();
@@ -27,5 +28,13 @@ export default function KakaoCallbackPage() {
     login();
   }, [code, router]);
 
-  return <div>로그인중이드ㅏ어라너알너ㅣ아러니알</div>;
+  return (
+    <div>
+      <Modal
+        text="로그인 중 ..."
+        btn={<KakaoTalkLoginBtn onClick={() => {}} />}
+        onClose={() => {}}
+      />
+    </div>
+  );
 }

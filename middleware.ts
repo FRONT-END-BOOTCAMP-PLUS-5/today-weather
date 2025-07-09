@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
   const routes = ['/ootd', '/my'];
 
   if (routes.some((route) => pathname.startsWith(route))) {
-    const token = request.cookies.get('auth-token');
+    const token = request.cookies.get('token');
     if (!token) {
       const url = request.nextUrl.clone();
       url.pathname = '/';
