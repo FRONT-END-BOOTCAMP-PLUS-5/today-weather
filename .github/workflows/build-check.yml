@@ -10,7 +10,10 @@ develop
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: OOTD  
+    environment: OOTD
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
     steps:
       
@@ -30,7 +33,4 @@ name: 📦 Install dependencies
 
       
 name: 🛠️ Build project
-      env:
-        NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       run: yarn build
