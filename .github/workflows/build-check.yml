@@ -1,24 +1,36 @@
-name: Build
+name: Build Check
 
 on:
-  push:
+  pull_request:
     branches:
-      - main
+      
+main
+develop
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+    environment: OOTD
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      
+name: 📥 Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: yarn install
+      
+name: ⚙️ Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'yarn'
 
-      - name: Build project
-        run: yarn build
+      
+name: 📦 Install dependencies
+      run: yarn install --frozen-lockfile
+
+      
+name: 🛠️ Build project
+      env:
+        NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      run: yarn build
