@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import Nav from './components/Nav';
-import Header from './components/Header';
+import { Header, Nav } from './components';
 
 const pretendard = localFont({
   src: '../public/fonts/PretendardVariable.woff2',
@@ -25,9 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${pretendard.className} bg-white flex flex-col min-h-screen`}
-      >
+      <body className={`${pretendard.className} bg-white flex flex-col min-h-screen`}>
         <Header />
         <main className="flex-1 pb-24">{children}</main>
         <Nav />
