@@ -9,7 +9,7 @@ export const useLoginModal = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const router = useRouter();
 
-  const handleLogin = () => {
+  const handleOpenModal = () => {
     setShowLoginModal(true);
   };
 
@@ -22,7 +22,7 @@ export const useLoginModal = () => {
     isAuthenticated,
     loading,
     showLoginModal,
-    handleLogin,
+    handleOpenModal,
     handleCloseModal,
   };
 };
