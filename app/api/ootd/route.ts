@@ -22,14 +22,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(created, { status: 201 });
   } catch (error) {
     console.error('Error creating board:', error);
-
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { message: error.message, error: 'CREATE_BOARD_ERROR' },
-        { status: 500 },
-      );
-    }
-
     return NextResponse.json({ message: '서버 에러', error: 'UNKNOWN_ERROR' }, { status: 500 });
   }
 }
