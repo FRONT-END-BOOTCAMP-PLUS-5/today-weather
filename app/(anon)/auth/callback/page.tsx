@@ -3,7 +3,7 @@
 
 import { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { kakaoLogin } from '@/lib/api/auth';
+import { kakaoLogin } from '@/app/api/auth';
 
 export default function KakaoCallbackPage() {
   const searchParams = useSearchParams();
