@@ -10,7 +10,9 @@ const ProfilePic = ({ profilePicture, onClick }: ProfilePicProps) => {
   return (
     <div className="relative">
       <Image
-        className="w-[121px] h-[121px] rounded-full"
+        width={121}
+        height={121}
+        className="rounded-full"
         src={profilePicture.src}
         alt="profile picture"
       />
