@@ -12,7 +12,7 @@ const ProfileHeader = ({
     nickname,
 }: ProfileHeaderProps) => {
     return (
-        <div className="w-full h-[210px] bg-white inline-flex flex-col justify-center items-center gap-[9px]">
+        <div className="w-full h-[210px] box-border bg-white flex flex-col justify-center items-center gap-[9px] pt-[30.5px] pb-[30.5px]">
             <ProfilePic profilePicture={profilePicture} onClick={() => {console.log("edit")}} />
             <ProfileName nickname={nickname} />
         </div>

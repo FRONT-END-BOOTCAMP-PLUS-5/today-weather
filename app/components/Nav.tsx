@@ -10,8 +10,6 @@ interface NavProps {
   className?: string;
 }
 
-
-
 const Nav: React.FC<NavProps> = ({ className = '' }) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -21,7 +19,7 @@ const Nav: React.FC<NavProps> = ({ className = '' }) => {
   const isHomeActive = pathname === '/' || (!isOOTDActive && !isMyActive);
 
   return (
-    <div className={`w-full h-24 bg-white shadow-[0px_-8px_16px_0px_rgba(34,34,34,0.10)] ${className}`}>
+    <div className={`fixed bottom-0 left-0 right-0 w-full h-24 bg-white shadow-[0px_-8px_16px_0px_rgba(34,34,34,0.10)] z-50 ${className}`}>
       <div className="flex justify-around items-center h-full">
         <button
           onClick={() => router.push('/ootd')}

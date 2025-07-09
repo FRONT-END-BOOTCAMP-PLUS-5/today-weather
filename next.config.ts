@@ -1,6 +1,17 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // Image domains configuration
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
   // TurboPack 설정
   turbopack: {
     rules: {

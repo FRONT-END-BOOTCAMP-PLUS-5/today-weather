@@ -1,12 +1,12 @@
 import ProfileEdit from '@/public/assets/icons/profile_edit.svg';
 import { StaticImageData } from 'next/image';
 
-interface ProfilePicProps {
+interface ProfilePicEditProps {
     onClick: () => void;
     profilePicture: StaticImageData;
 }
 
-const ProfilePic = ({ profilePicture, onClick }: ProfilePicProps) => {
+const ProfilePicEdit = ({ profilePicture, onClick }: ProfilePicEditProps) => {
     return (
         <div className="relative">
             <img className="w-[121px] h-[121px] rounded-full" src={profilePicture.src} />
@@ -18,4 +18,4 @@ const ProfilePic = ({ profilePicture, onClick }: ProfilePicProps) => {
     );
 };
 
-export default ProfilePic;
+export default ProfilePicEdit;

@@ -1,10 +1,8 @@
-import edit_pencil from '@/public/assets/icons/edit_pencil.svg';
-
-interface ProfileNameEditProps {
+interface ProfileNameProps {
     nickname: string;
 }
 
-const ProfileNameEdit = ({ nickname }: ProfileNameEditProps) => {
+const ProfileName = ({ nickname }: ProfileNameProps) => {
     return (
         <div className="inline-flex justify-start items-center gap-1 relative">
             <div className="text-center justify-start text-black text-base font-medium font-['Pretendard']">{nickname}</div>
@@ -12,4 +10,4 @@ const ProfileNameEdit = ({ nickname }: ProfileNameEditProps) => {
     );
 };
 
-export default ProfileNameEdit;
+export default ProfileName;
