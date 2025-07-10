@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { getUserFromJWT } from '@/utils/auth/tokenAuth';
 
-// 사용자가 작성한 포스트 목록 조회
 export async function GET() {
   const user = await getUserFromJWT();
   if (!user) {
