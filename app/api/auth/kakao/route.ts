@@ -2,21 +2,19 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { SbAuthRepository } from '@/(backend)/user/infrastructure/repositories/SbAuthRepository';
-import { KakaoAuthServiceImpl } from '@/(backend)/user/infrastructure/repositories/SbKakaoAuthServiceImpl';
+import { SbKakaoAuthServiceImpl } from '@/(backend)/user/infrastructure/repositories/SbKakaoAuthServiceImpl';
 import { KakaoLoginUseCase } from '@/(backend)/user/application/usecases/KakaoLoginUseCase';
 
 export async function POST(req: Request) {
   try {
     const { code } = await req.json();
-
     if (!code) {
       return NextResponse.json({ error: '인가 코드가 없습니다.' }, { status: 400 });
     }
 
     const authRepository = new SbAuthRepository();
-    const kakaoAuthService = new KakaoAuthServiceImpl();
+    const kakaoAuthService = new SbKakaoAuthServiceImpl();
     const kakaoLoginUseCase = new KakaoLoginUseCase(kakaoAuthService, authRepository);
-
     const { token } = await kakaoLoginUseCase.execute(code);
 
     const cookieStore = await cookies();

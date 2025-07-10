@@ -1,7 +1,7 @@
 import { IKakaoAuthService } from '../../domain/repositories/IKakaoAuthService';
 import { User } from '../../domain/entities/User';
 
-export class KakaoAuthServiceImpl implements IKakaoAuthService {
+export class SbKakaoAuthServiceImpl implements IKakaoAuthService {
   async getAccessToken(code: string): Promise<string> {
     const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
       method: 'POST',

@@ -1,56 +1,12 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { SbAuthRepository } from '@/(backend)/user/infrastructure/repositories/SbAuthRepository';
-import { KakaoAuthServiceImpl } from '@/(backend)/user/infrastructure/repositories/SbKakaoAuthServiceImpl';
-import { KakaoLoginUseCase } from '@/(backend)/user/application/usecases/KakaoLoginUseCase';
-
-export async function POST(req: Request) {
-  try {
-    const { code } = await req.json();
-
-    if (!code) {
-      return NextResponse.json({ error: '인가 코드가 없습니다.' }, { status: 400 });
-    }
-
-    const authRepository = new SbAuthRepository();
-    const kakaoAuthService = new KakaoAuthServiceImpl();
-    const kakaoLoginUseCase = new KakaoLoginUseCase(kakaoAuthService, authRepository);
-
-    const { token } = await kakaoLoginUseCase.execute(code);
-
-    const cookieStore = await cookies();
-    cookieStore.set('token', token, {
-      httpOnly: true,
-      path: '/',
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 7, // 7일
-    });
-
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error('카카오 로그인 오류:', err);
-
-    if (err instanceof Error) {
-      if (err.message.includes('access token')) {
-        return NextResponse.json({ error: '토큰 요청 실패' }, { status: 400 });
-      }
-      if (err.message.includes('user info')) {
-        return NextResponse.json({ error: '사용자 정보 없음' }, { status: 400 });
-      }
-      if (err.message.includes('upsert user')) {
-        return NextResponse.json({ error: 'DB 저장 실패' }, { status: 500 });
-      }
-    }
-
-    return NextResponse.json({ error: '서버 오류' }, { status: 500 });
-  }
-}
 
 export async function GET() {
-  const response = NextResponse.redirect('/'); // 홈으로 리디렉션
-  response.cookies.set('token', '', {
-    maxAge: 0, // 만료시킴
-    path: '/',
-  });
-  return response;
+  try {
+    const response = NextResponse.json({ success: true, message: '로그아웃 완료' });
+    response.cookies.set('token', '', { maxAge: 0, path: '/' });
+    return response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.';
+    return NextResponse.json({ success: false, message }, { status: 500 });
+  }
 }
