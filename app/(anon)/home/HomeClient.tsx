@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useLoginModal } from '@/app/hooks/useLoginModal';
 import { KakaoLoginModalContainer } from '@/app/components';
 
-export default function Home() {
+export default function HomeClient() {
   const searchParams = useSearchParams();
   const { showLoginModal, handleOpenModal, isAuthenticated, loading, handleCloseModal } =
     useLoginModal();
