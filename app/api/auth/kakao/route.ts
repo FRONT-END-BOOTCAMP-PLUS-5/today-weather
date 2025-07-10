@@ -1,8 +1,8 @@
 // app/api/auth/kakao/route.ts
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { SupabaseAuthRepository } from '@/(backend)/user/infrastructure/repositories/SupabaseAuthRepository';
-import { KakaoAuthServiceImpl } from '@/(backend)/user/infrastructure/repositories/KakaoAuthServiceImpl';
+import { SbAuthRepository } from '@/(backend)/user/infrastructure/repositories/SbAuthRepository';
+import { KakaoAuthServiceImpl } from '@/(backend)/user/infrastructure/repositories/SbKakaoAuthServiceImpl';
 import { KakaoLoginUseCase } from '@/(backend)/user/application/usecases/KakaoLoginUseCase';
 
 export async function POST(req: Request) {
@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: '인가 코드가 없습니다.' }, { status: 400 });
     }
 
-    const authRepository = new SupabaseAuthRepository();
+    const authRepository = new SbAuthRepository();
     const kakaoAuthService = new KakaoAuthServiceImpl();
     const kakaoLoginUseCase = new KakaoLoginUseCase(kakaoAuthService, authRepository);
 

@@ -1,9 +1,9 @@
-import { AuthRepository } from '../../domain/repositories/AuthRepository';
+import { IAuthRepository } from '../../domain/repositories/IAuthRepository';
 import { User } from '../../domain/entities/User';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import jwt from 'jsonwebtoken';
 
-export class SupabaseAuthRepository implements AuthRepository {
+export class SbAuthRepository implements IAuthRepository {
   private readonly JWT_SECRET = process.env.JWT_SECRET!;
 
   async upsertUser(user: User): Promise<User> {

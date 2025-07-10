@@ -1,6 +1,6 @@
 import { User } from '../entities/User';
 
-export interface KakaoAuthService {
+export interface IKakaoAuthService {
   getAccessToken(code: string): Promise<string>;
   getUserInfo(accessToken: string): Promise<User>;
 }

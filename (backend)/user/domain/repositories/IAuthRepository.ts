@@ -1,6 +1,6 @@
 import { User } from '../entities/User';
 
-export interface AuthRepository {
+export interface IAuthRepository {
   upsertUser(user: User): Promise<User>;
   generateJWT(user: User): string;
 }
