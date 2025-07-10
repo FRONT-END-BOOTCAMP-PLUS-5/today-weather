@@ -1,6 +1,6 @@
-import { User, KakaoUserInfo } from '../entities/User';
+import { User } from '../entities/User';
 
 export interface AuthRepository {
-  upsertUser(user: KakaoUserInfo): Promise<User>;
+  upsertUser(user: User): Promise<User>;
   generateJWT(user: User): string;
 }

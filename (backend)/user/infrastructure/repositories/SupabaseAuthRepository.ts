@@ -1,18 +1,18 @@
 import { AuthRepository } from '../../domain/repositories/AuthRepository';
-import { User, KakaoUserInfo } from '../../domain/entities/User';
+import { User } from '../../domain/entities/User';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import jwt from 'jsonwebtoken';
 
 export class SupabaseAuthRepository implements AuthRepository {
   private readonly JWT_SECRET = process.env.JWT_SECRET!;
 
-  async upsertUser(user: KakaoUserInfo): Promise<User> {
+  async upsertUser(user: User): Promise<User> {
     const { data, error } = await supabase
       .from('user')
       .upsert({
         id: user.id,
         name: user.name,
-        profile_img: user.profile_img,
+        profile_img: user.profileImg,
       })
       .select()
       .single();
@@ -26,7 +26,7 @@ export class SupabaseAuthRepository implements AuthRepository {
 
   generateJWT(user: User): string {
     return jwt.sign(
-      { id: user.id, name: user.name, profile_img: user.profile_img },
+      { id: user.id, name: user.name, profile_img: user.profileImg },
       this.JWT_SECRET,
       { expiresIn: '7d' },
     );
