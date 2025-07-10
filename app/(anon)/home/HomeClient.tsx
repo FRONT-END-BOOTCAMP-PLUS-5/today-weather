@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { useLoginModal } from '@/app/hooks/useLoginModal';
+import { useLoginModal } from '@/hooks/useLoginModal';
 import { KakaoLoginModalContainer } from '@/app/components';
 
 export default function HomeClient() {
