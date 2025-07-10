@@ -1,7 +1,7 @@
 // app/auth/kakao/callback/page.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { kakaoLogin } from '@/app/api/auth';
 import { KakaoTalkLoginBtn, Modal } from '@/app/components';
@@ -29,12 +29,12 @@ export default function KakaoCallbackPage() {
   }, [code, router]);
 
   return (
-    <div>
+    <Suspense fallback={<div>로딩 중...</div>}>
       <Modal
         text="로그인 중 ..."
         btn={<KakaoTalkLoginBtn onClick={() => {}} />}
         onClose={() => {}}
       />
-    </div>
+    </Suspense>
   );
 }
