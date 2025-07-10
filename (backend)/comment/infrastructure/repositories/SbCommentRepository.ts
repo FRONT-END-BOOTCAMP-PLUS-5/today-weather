@@ -37,10 +37,8 @@ class SbCommentRepository implements ICommentRepository {
     const roots: CommentWithUser[] = [];
     flat.forEach((c) => {
       if (c.parent_id === null) {
-        // 최상위 댓글이면 roots에
         roots.push(c);
       } else {
-        // 대댓글이면 부모의 replies에만 넣기
         const parent = map.get(c.parent_id);
         if (parent) {
           if (!parent.replies) parent.replies = [];

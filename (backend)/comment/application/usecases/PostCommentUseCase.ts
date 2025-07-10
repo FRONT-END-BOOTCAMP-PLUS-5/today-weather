@@ -7,6 +7,7 @@ class PostCommentUseCase {
   constructor(commentRepository: SbCommentRepository) {
     this.commentRepository = commentRepository;
   }
+
   async execute(comment: Omit<Comment, 'id' | 'date_created'>): Promise<Comment> {
     try {
       const createdComment = await this.commentRepository.create(comment);
