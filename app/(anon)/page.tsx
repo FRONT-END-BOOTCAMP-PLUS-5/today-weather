@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useLoginModal } from '@/app/hooks/useLoginModal';
 import { KakaoLoginModalContainer } from '@/app/components';
 
@@ -23,9 +23,11 @@ export default function Home() {
 
   return (
     <>
-      {showLoginModal && (
-        <KakaoLoginModalContainer onLogin={handleLogin} onClose={handleCloseModal} />
-      )}
+      <Suspense fallback={<div>로딩 중...</div>}>
+        {showLoginModal && (
+          <KakaoLoginModalContainer onLogin={handleLogin} onClose={handleCloseModal} />
+        )}
+      </Suspense>
     </>
   );
 }
