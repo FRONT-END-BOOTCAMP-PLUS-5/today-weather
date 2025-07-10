@@ -4,6 +4,7 @@ import SbBoardRepository from '@/(backend)/ootd/infrastructure/repositories/SbBo
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { NextRequest, NextResponse } from 'next/server';
 
+/* 게시글 작성 */
 export async function POST(req: NextRequest) {
   try {
     const supabaseClient = supabase;
@@ -11,14 +12,20 @@ export async function POST(req: NextRequest) {
     const createUseCase = new CreateUseCase(repository);
 
     const body = await req.json();
-    const { text, feels_like, user_id, season } = body;
+    const { text, feels_like, user_id, season, img_url } = body;
 
-    const created = await createUseCase.execute({
-      text,
-      feels_like,
-      user_id,
-      season,
-    });
+    // img_url이 문자열이면 배열로 변환
+    const imgUrls = img_url ? (Array.isArray(img_url) ? img_url : [img_url]) : [];
+
+    const created = await createUseCase.execute(
+      {
+        text,
+        feels_like,
+        user_id,
+        season,
+      },
+      imgUrls,
+    );
 
     return NextResponse.json(created, { status: 201 });
   } catch (error) {
@@ -27,6 +34,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
+/* 게시글 조회 */
 export async function GET() {
   try {
     const supabaseClient = supabase;

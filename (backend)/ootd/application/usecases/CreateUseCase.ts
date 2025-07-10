@@ -8,9 +8,9 @@ class CreateUseCase {
     this.boardRepository = boardRepository;
   }
 
-  async execute(board: Omit<Board, 'id' | 'date_created'>): Promise<Board> {
+  async execute(board: Omit<Board, 'id' | 'date_created'>, img_url?: string[]): Promise<Board> {
     try {
-      const createdBoard = await this.boardRepository.create(board);
+      const createdBoard = await this.boardRepository.create(board, img_url);
       return createdBoard;
     } catch (error) {
       console.error('Error creating board:', error);

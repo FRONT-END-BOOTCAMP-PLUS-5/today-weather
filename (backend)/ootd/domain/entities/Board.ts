@@ -5,6 +5,7 @@ interface Board {
   date_created: string;
   user_id: number;
   season: string;
+  photos?: { img_url: string }[];
 }
 
 export default Board;
