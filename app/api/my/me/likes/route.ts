@@ -29,5 +29,17 @@ export async function GET() {
     return NextResponse.json({ ok: false, error: likesError.message }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true, likes });
+  const { data: posts, error: postsError } = await supabase
+    .from('post')
+    .select('*')
+    .in(
+      'id',
+      likes.map((like) => like.post_id),
+    );
+
+  if (postsError) {
+    return NextResponse.json({ ok: false, error: postsError.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true, posts });
 }
