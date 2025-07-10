@@ -1,15 +1,20 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/utils/supabase/supabaseClient';
+import { getUserFromJWT } from '@/utils/auth/tokenAuth';
 
+// 사용자가 좋아요한 포스트 목록 조회
 export async function GET() {
-  const dummyUserId = 1;
-  const { data: user, error: userError } = await supabase
+  const user = await getUserFromJWT();
+  if (!user) {
+    return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+  }
+  const { data: userData, error: userError } = await supabase
     .from('user')
     .select('id')
-    .eq('id', dummyUserId)
+    .eq('id', user.id)
     .single();
 
-  if (userError || !user) {
+  if (userError || !userData) {
     return NextResponse.json(
       { ok: false, error: userError?.message || 'User not found' },
       { status: 404 },
@@ -19,7 +24,7 @@ export async function GET() {
   const { data: likes, error: likesError } = await supabase
     .from('likes')
     .select('post_id')
-    .eq('user_id', dummyUserId);
+    .eq('user_id', userData.id);
 
   if (likesError) {
     return NextResponse.json({ ok: false, error: likesError.message }, { status: 500 });
