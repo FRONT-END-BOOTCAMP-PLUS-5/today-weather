@@ -9,12 +9,12 @@ class SbCommentRepository implements ICommentRepository {
     const { data, error } = await this.supabase.from('comment').insert([comment]).select().single();
 
     if (error) {
-      console.error('Supabase error:', error);
-      throw new Error(`Failed to create comment: ${error.message}`);
+      console.error('데이터베이스 오류입니다.', error);
+      throw new Error(`생성에 실패했습니다.  ${error.message}`);
     }
 
     if (!data) {
-      throw new Error('No data returned from insert operation');
+      throw new Error('댓글 생성에 실패했습니다. 데이터가 없습니다.');
     }
 
     return data;
@@ -48,6 +48,19 @@ class SbCommentRepository implements ICommentRepository {
       }
     });
     return roots;
+  }
+  async deleteById(commentId: number, userId: number): Promise<boolean> {
+    // "내가 쓴 댓글만" 삭제
+    const { error } = await this.supabase
+      .from('comment')
+      .delete()
+      .match({ id: commentId, user_id: userId });
+
+    if (error) {
+      console.error('데이터베이스 오류입니다.', error);
+      throw new Error(`삭제에 실패했습니다. ${error.message}`);
+    }
+    return true;
   }
 }
 export default SbCommentRepository;
