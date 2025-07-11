@@ -1,22 +1,25 @@
-import { StaticImageData } from "next/image";
-import ProfilePicEdit from "./ProfilePic";
-import ProfileNameEdit from "./ProfileNameEdit";
+'use client';
 
-interface ProfileHeaderProps {
-    profilePicture: StaticImageData;
-    nickname: string;
+import ProfilePicEdit from './ProfilePicEdit';
+import ProfileNameEdit from './ProfileNameEdit';
+
+interface ProfileEditHeaderProps {
+  profilePicture: string | null;
+  userName: string | null;
 }
 
-const ProfileHeader = ({
-    profilePicture,
-    nickname,
-}: ProfileHeaderProps) => {
-    return (
-        <div className="w-full h-[210px] bg-white inline-flex flex-col justify-center items-center gap-9px">
-            <ProfilePicEdit profilePicture={profilePicture} onClick={() => {console.log("edit")}} />
-            <ProfileNameEdit nickname={nickname} />
-        </div>
-    );
+const ProfileEditHeader = ({ profilePicture, userName }: ProfileEditHeaderProps) => {
+  const handleEditClick = () => {
+    console.log('edit');
+    // Add your edit logic here
+  };
+
+  return (
+    <div className="w-full h-[210px] bg-white inline-flex flex-col justify-center items-center gap-9px">
+      <ProfilePicEdit profilePicture={profilePicture} onClick={handleEditClick} />
+      <ProfileNameEdit userName={userName} />
+    </div>
+  );
 };
 
-export default ProfileHeader;
+export default ProfileEditHeader;
