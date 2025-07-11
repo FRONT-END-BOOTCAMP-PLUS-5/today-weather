@@ -16,7 +16,7 @@ export async function getUserFromJWT(): Promise<JWTPayload | null> {
     if (
       typeof data === 'object' &&
       data !== null &&
-      typeof data.id === 'string' &&
+      typeof data.id === 'number' &&
       typeof data.name === 'string' &&
       typeof data.profile_img === 'string'
     ) {
