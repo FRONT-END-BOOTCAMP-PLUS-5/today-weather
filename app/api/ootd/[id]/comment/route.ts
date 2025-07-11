@@ -6,7 +6,7 @@ import { getUserFromJWT } from '@/utils/auth/tokenAuth';
 import PostCommentUseCase from '@/(backend)/comment/application/usecases/PostCommentUseCase';
 
 // 게시글 댓글 조회 API
-export async function GET(req: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getUserFromJWT();
     if (!user) {
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ post
 
     // params를 await하여 postId 가져오기
     const resolvedParams = await params;
-    const postId = Number(resolvedParams.postId);
+    const postId = Number(resolvedParams.id);
 
     const comments = await getCommentsByPostUseCase.execute(postId, user.id);
 
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ post
 }
 
 // 게시글 댓글 작성 API
-export async function POST(req: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getUserFromJWT();
     if (!user) {
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pos
     const createdComment = await postCommentUseCase.execute({
       text,
       user_id: user.id,
-      post_id: Number(resolvedParams.postId),
+      post_id: Number(resolvedParams.id),
       parent_id: parent_id ?? null,
     });
 

@@ -3,10 +3,7 @@ import { getUserFromJWT } from '@/utils/auth/tokenAuth';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function DELETE(
-  req: NextRequest,
-  context: { params: Promise<{ commentId: string }> },
-) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const user = await getUserFromJWT();
     if (!user) {
@@ -14,7 +11,7 @@ export async function DELETE(
     }
 
     const params = await context.params;
-    const commentId = Number(params.commentId);
+    const commentId = Number(params.id);
 
     const supabaseClient = supabase;
     const repository = new SbCommentRepository(supabaseClient);
@@ -28,7 +25,7 @@ export async function DELETE(
     return NextResponse.json({
       ok: true,
       message: '댓글이 성공적으로 삭제되었습니다.',
-      commentId: params.commentId,
+      commentId: params.id,
     });
   } catch (error) {
     console.error('Error deleting comment:', error);
