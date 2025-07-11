@@ -1,4 +1,4 @@
-import { CommentWithUser, RawCommentWithUser } from '../../domain/entities/Comment';
+import { RawCommentWithUser, CommentWithUser } from '../../application/dtos/CommentDto';
 
 export class CommentMapper {
   static toDomain(raw: RawCommentWithUser, myUserId: number): CommentWithUser {

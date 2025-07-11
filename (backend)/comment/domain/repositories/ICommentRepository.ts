@@ -1,4 +1,5 @@
-import Comment, { CommentWithUser } from '../entities/Comment';
+import Comment from '../entities/Comment';
+import { CommentWithUser } from '../../application/dtos/CommentDto';
 
 interface ICommentRepository {
   create(comment: Omit<Comment, 'id' | 'date_created'>): Promise<Comment>;

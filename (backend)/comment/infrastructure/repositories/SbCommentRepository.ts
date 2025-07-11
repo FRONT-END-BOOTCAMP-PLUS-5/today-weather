@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import Comment, { CommentWithUser, RawCommentWithUser } from '../../domain/entities/Comment';
+import Comment from '../../domain/entities/Comment';
+import { CommentWithUser, RawCommentWithUser } from '../../application/dtos/CommentDto';
 import ICommentRepository from '../../domain/repositories/ICommentRepository';
 import { CommentMapper } from '../mapper/CommentMapper';
 

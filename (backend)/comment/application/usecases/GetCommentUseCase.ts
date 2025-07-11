@@ -1,5 +1,5 @@
 import SbCommentRepository from '../../infrastructure/repositories/SbCommentRepository';
-import { CommentWithUser } from '../../domain/entities/Comment'; // DTO 타입 import!
+import { CommentWithUser } from '../dtos/CommentDto';
 
 class GetCommentUseCase {
   private commentRepository: SbCommentRepository;
