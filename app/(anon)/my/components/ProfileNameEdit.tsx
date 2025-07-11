@@ -7,7 +7,7 @@ const ProfileNameEdit = ({ userName }: { userName: string | null }) => {
         {userName}
       </div>
       <EditPencil
-        className="w-[9.1px] h-[9.1px] bg-transparent rounded-full shadow-[4px_4px_4px_0px_rgba(0,0,0,0.13)] cursor-pointer hover:bg-gray-50 transition-colors"
+        className="w-[9.1px] h-[9.1px] bg-transparent rounded-full cursor-pointer transition-colors"
         onClick={() => {
           console.log('edit');
         }}
