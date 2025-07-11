@@ -4,6 +4,7 @@ import SbBoardRepository from '@/(backend)/ootd/infrastructure/repositories/SbBo
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { NextRequest, NextResponse } from 'next/server';
 import UpdateUseCase from '@/(backend)/ootd/application/usecases/UpdateUseCase';
+import DeleteUseCase from '@/(backend)/ootd/application/usecases/DeleteUseCase';
 
 /* 게시글 작성 */
 export async function POST(req: NextRequest) {
@@ -75,6 +76,32 @@ export async function PUT(req: NextRequest) {
     console.error('Error updating board:', error);
     return NextResponse.json(
       { message: '게시글 수정 실패', error: 'UPDATE_ERROR' },
+      { status: 500 },
+    );
+  }
+}
+
+/* 게시글 삭제 */
+export async function DELETE(req: NextRequest) {
+  try {
+    const supabaseClient = supabase;
+    const repository = new SbBoardRepository(supabaseClient);
+    const deleteUseCase = new DeleteUseCase(repository);
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ message: '게시글 ID는 필수입니다.' }, { status: 400 });
+    }
+
+    await deleteUseCase.execute(id);
+
+    return NextResponse.json({ message: '게시글이 삭제되었습니다.' }, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting board:', error);
+    return NextResponse.json(
+      { message: '게시글 삭제 실패', error: 'DELETE_ERROR' },
       { status: 500 },
     );
   }
