@@ -1,5 +1,5 @@
 export interface JWTPayload {
-  id: string;
+  id: number;
   name: string;
   profile_img: string;
   iat?: number;
