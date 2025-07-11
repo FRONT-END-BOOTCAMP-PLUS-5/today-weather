@@ -1,5 +1,9 @@
-import ProfileEdit from '@/public/assets/icons/profile_edit.svg';
+'use client';
+
+import { useEffect, useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
+import ProfileEdit from '@/public/assets/icons/profile_edit.svg';
+import axios from 'axios';
 
 interface ProfilePicProps {
   onClick: () => void;
@@ -7,13 +11,36 @@ interface ProfilePicProps {
 }
 
 const ProfilePic = ({ profilePicture, onClick }: ProfilePicProps) => {
+  const [profileImgUrl, setProfileImgUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfileImg = async () => {
+      try {
+        const res = await axios.get('/api/my/me');
+
+        if (res.data.ok && res.data.user) {
+          setProfileImgUrl(res.data.user.profile_img);
+        } else {
+          console.error('Error fetching profile image:', res.data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching profile image:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProfileImg();
+  }, []);
+
+  if (isLoading) return <div>Loading...</div>;
+
   return (
-    <div className="relative">
+    <div className="relative w-[121px] h-[121px]">
       <Image
-        width={121}
-        height={121}
-        className="rounded-full"
-        src={profilePicture.src}
+        fill
+        className="rounded-full object-cover"
+        src={profileImgUrl || profilePicture.src}
         alt="profile picture"
       />
       <ProfileEdit
