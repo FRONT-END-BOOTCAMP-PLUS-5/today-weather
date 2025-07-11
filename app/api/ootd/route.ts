@@ -3,6 +3,7 @@ import GetPostUseCase from '@/(backend)/ootd/application/usecases/GetPostUseCase
 import SbBoardRepository from '@/(backend)/ootd/infrastructure/repositories/SbBoardRepositories';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { NextRequest, NextResponse } from 'next/server';
+import UpdateUseCase from '@/(backend)/ootd/application/usecases/UpdateUseCase';
 
 /* 게시글 작성 */
 export async function POST(req: NextRequest) {
@@ -48,6 +49,32 @@ export async function GET() {
     console.error('Error fetching posts:', error);
     return NextResponse.json(
       { message: '게시글 조회 실패', error: 'FETCH_ERROR' },
+      { status: 500 },
+    );
+  }
+}
+
+/* 게시글 수정 */
+export async function PUT(req: NextRequest) {
+  try {
+    const supabaseClient = supabase;
+    const repository = new SbBoardRepository(supabaseClient);
+    const updateUseCase = new UpdateUseCase(repository);
+
+    const body = await req.json();
+    const { id, text } = body;
+
+    if (!id || typeof text !== 'string') {
+      return NextResponse.json({ message: 'id와 text는 필수입니다.' }, { status: 400 });
+    }
+
+    await updateUseCase.execute(id, { text });
+
+    return NextResponse.json({ message: '게시글이 수정되었습니다.' }, { status: 200 });
+  } catch (error) {
+    console.error('Error updating board:', error);
+    return NextResponse.json(
+      { message: '게시글 수정 실패', error: 'UPDATE_ERROR' },
       { status: 500 },
     );
   }
