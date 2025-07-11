@@ -13,7 +13,7 @@ class PostCommentUseCase {
       const createdComment = await this.commentRepository.create(comment);
       return createdComment;
     } catch (err) {
-      console.error('Error posting comment:', err);
+      console.error('댓글 생성 실패', err);
       throw err;
     }
   }

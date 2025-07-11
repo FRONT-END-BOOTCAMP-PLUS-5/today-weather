@@ -1,6 +1,6 @@
 import { RawCommentWithUser, CommentWithUser } from '../../application/dtos/CommentDto';
 
-export class CommentMapper {
+class CommentMapper {
   static toDomain(raw: RawCommentWithUser, myUserId: number): CommentWithUser {
     return {
       id: raw.id,
@@ -18,3 +18,5 @@ export class CommentMapper {
     };
   }
 }
+
+export default CommentMapper;

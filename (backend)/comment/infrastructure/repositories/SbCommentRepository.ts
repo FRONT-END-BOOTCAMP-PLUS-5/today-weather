@@ -2,7 +2,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import Comment from '../../domain/entities/Comment';
 import { CommentWithUser, RawCommentWithUser } from '../../application/dtos/CommentDto';
 import ICommentRepository from '../../domain/repositories/ICommentRepository';
-import { CommentMapper } from '../mapper/CommentMapper';
+import CommentMapper from '../mapper/CommentMapper';
 
 class SbCommentRepository implements ICommentRepository {
   constructor(private readonly supabase: SupabaseClient) {}
@@ -51,28 +51,45 @@ class SbCommentRepository implements ICommentRepository {
     return roots;
   }
   async deleteById(commentId: number, userId: number): Promise<boolean> {
-    // 내가 쓴 댓글인지 먼저 확인
-    const { data: parent, error: fetchError } = await this.supabase
-      .from('comment')
-      .select('id')
-      .eq('id', commentId)
-      .eq('user_id', userId)
-      .single();
+    try {
+      // 내가 쓴 댓글인지 먼저 확인
+      const { data: parent, error: fetchError } = await this.supabase
+        .from('comment')
+        .select('id, user_id')
+        .eq('id', commentId)
+        .eq('user_id', userId)
+        .single();
 
-    if (fetchError || !parent) {
-      throw new Error('댓글이 존재하지 않거나 권한이 없습니다.');
+      if (fetchError) {
+        console.error('댓글 조회 에러:', fetchError);
+        if (fetchError.code === 'PGRST116') {
+          throw new Error('권한이 없습니다.');
+        }
+        throw new Error(`조회 실패: ${fetchError.message}`);
+      }
+
+      if (!parent) {
+        console.error(`권한 없음: ${commentId}`);
+        throw new Error('권한이 없습니다.');
+      }
+
+      // 댓글 + 대댓글 삭제
+      const { error: deleteError } = await this.supabase
+        .from('comment')
+        .delete()
+        .or(`id.eq.${commentId},parent_id.eq.${commentId}`);
+
+      if (deleteError) {
+        console.error('삭제 에러:', deleteError);
+        throw new Error(`삭제 실패: ${deleteError.message}`);
+      }
+
+      console.log(`삭제 완료: ${commentId}`);
+      return true;
+    } catch (error) {
+      console.error('deleteById 에러:', error);
+      throw error;
     }
-
-    // 댓글 + 대댓글 삭제
-    const { error } = await this.supabase
-      .from('comment')
-      .delete()
-      .or(`id.eq.${commentId},parent_id.eq.${commentId}`);
-
-    if (error) {
-      throw new Error(`댓글 삭제 실패: ${error.message}`);
-    }
-    return true;
   }
 }
 export default SbCommentRepository;

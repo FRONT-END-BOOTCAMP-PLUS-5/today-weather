@@ -13,7 +13,7 @@ class GetCommentUseCase {
       const comments = await this.commentRepository.getCommentByPostId(postId, myUserId);
       return comments;
     } catch (err) {
-      console.error('Error fetching comments:', err);
+      console.error('댓글 조회 실패', err);
       throw err;
     }
   }

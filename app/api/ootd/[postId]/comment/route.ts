@@ -4,7 +4,8 @@ import SbCommentRepository from '@/(backend)/comment/infrastructure/repositories
 import GetCommentUseCase from '@/(backend)/comment/application/usecases/GetCommentUseCase';
 import { getUserFromJWT } from '@/utils/auth/tokenAuth';
 
-export async function GET(req: NextRequest, { params }: { params: { postId: string } }) {
+// 게시글 댓글 조회 API
+export async function GET(req: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
   try {
     const user = await getUserFromJWT();
     if (!user) {
@@ -15,7 +16,9 @@ export async function GET(req: NextRequest, { params }: { params: { postId: stri
     const repository = new SbCommentRepository(supabaseClient);
     const getCommentsByPostUseCase = new GetCommentUseCase(repository);
 
-    const postId = Number(params.postId);
+    // params를 await하여 postId 가져오기
+    const resolvedParams = await params;
+    const postId = Number(resolvedParams.postId);
 
     const comments = await getCommentsByPostUseCase.execute(postId, user.id);
 
