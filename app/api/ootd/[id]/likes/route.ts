@@ -4,14 +4,15 @@ import { getUserFromJWT } from '@/utils/auth/tokenAuth';
 import { SbLikesRepository } from '@/(backend)/likes/infrastructure/repositories/SbLikesRepository';
 import { PostLikesUseCase } from '@/(backend)/likes/application/usecases/PostLikesUsecase';
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getUserFromJWT();
     if (!user) {
       return NextResponse.json({ success: false, message: '인증이 필요합니다.' }, { status: 401 });
     }
 
-    const postId = parseInt(params.id);
+    const { id } = await params;
+    const postId = parseInt(id);
     if (isNaN(postId)) {
       return NextResponse.json(
         { success: false, message: '유효하지 않은 게시물 ID입니다.' },
@@ -32,14 +33,14 @@ export async function POST(req: Request, { params }: { params: { id: string } })
 }
 
 //좋아요 개수 조회
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getUserFromJWT();
     if (!user) {
       return NextResponse.json({ success: false, message: '인증이 필요합니다.' }, { status: 401 });
     }
-
-    const postId = parseInt(params.id);
+    const { id } = await params;
+    const postId = parseInt(id);
     if (isNaN(postId)) {
       return NextResponse.json(
         { success: false, message: '유효하지 않은 게시물 ID입니다.' },
