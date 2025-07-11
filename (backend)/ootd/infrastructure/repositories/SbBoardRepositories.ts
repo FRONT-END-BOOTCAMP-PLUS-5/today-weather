@@ -89,6 +89,33 @@ class SbBoardRepository implements IBoardRepository {
     const { error } = await this.supabase.from('post').delete().eq('id', id);
     if (error) throw error;
   }
+
+  // 계절별 게시글 조회
+  async getBySeason(season: string): Promise<Board[]> {
+    const { data, error } = await this.supabase.from('post').select(`*, photos:photo(img_url)`);
+    if (error) throw error;
+
+    // 생성 날짜 기준으로 계절 필터링
+    return data.filter((post) => {
+      const createdDate = new Date(post.date_created);
+      const createdMonth = createdDate.getMonth() + 1; // 0-based to 1-based
+
+      // 월별로 계절 자동 계산
+      let postSeason: string;
+      if (createdMonth >= 3 && createdMonth <= 5) {
+        postSeason = '봄';
+      } else if (createdMonth >= 6 && createdMonth <= 8) {
+        postSeason = '여름';
+      } else if (createdMonth >= 9 && createdMonth <= 11) {
+        postSeason = '가을';
+      } else {
+        postSeason = '겨울';
+      }
+
+      // 요청한 계절과 일치하는지 확인
+      return postSeason === season;
+    });
+  }
 }
 
 export default SbBoardRepository;

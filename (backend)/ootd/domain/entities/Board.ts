@@ -4,7 +4,6 @@ interface Board {
   feels_like: number;
   date_created: string;
   user_id: number;
-  season: string;
   photos?: { img_url: string }[];
 }
 
