@@ -1,11 +1,6 @@
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
-
-interface JWTPayload {
-  id: number;
-  name: string;
-  profile_img: string;
-}
+import { JWTPayload } from '@/(backend)/user/domain/entities/JWTPayload';
 
 export async function getUserFromJWT(): Promise<JWTPayload | null> {
   const cookieStore = await cookies();
@@ -21,7 +16,7 @@ export async function getUserFromJWT(): Promise<JWTPayload | null> {
     if (
       typeof data === 'object' &&
       data !== null &&
-      typeof data.id === 'number' &&
+      typeof data.id === 'string' &&
       typeof data.name === 'string' &&
       typeof data.profile_img === 'string'
     ) {
