@@ -71,18 +71,84 @@ export class SbAuthRepository implements IAuthRepository {
   }
 
   async deleteUser(user: User): Promise<User> {
-    const { data, error } = await supabase
-      .from('user')
-      .delete()
-      .eq('id', user.id)
-      .select()
-      .single();
+    try {
+      //알림림
+      const { error: receivedNotificationsError } = await supabase
+        .from('notification')
+        .delete()
+        .eq('user_id', user.id);
 
-    if (error) {
-      throw new Error(`Failed to delete user: ${error.message}`);
+      if (receivedNotificationsError) {
+        throw new Error(
+          `Failed to delete received notifications: ${receivedNotificationsError.message}`,
+        );
+      }
+      //받은 알림림
+      const { error: sentNotificationsError } = await supabase
+        .from('notification')
+        .delete()
+        .eq('actor_id', user.id);
+
+      if (sentNotificationsError) {
+        throw new Error(`Failed to delete sent notifications: ${sentNotificationsError.message}`);
+      }
+      //댓글글
+      const { error: commentsError } = await supabase
+        .from('comment')
+        .delete()
+        .eq('user_id', user.id);
+
+      if (commentsError) {
+        throw new Error(`Failed to delete user comments: ${commentsError.message}`);
+      }
+      //좋아요
+      const { error: likesError } = await supabase.from('likes').delete().eq('user_id', user.id);
+
+      if (likesError) {
+        throw new Error(`Failed to delete user likes: ${likesError.message}`);
+      }
+      //게시물
+      const { data: userPosts, error: postsQueryError } = await supabase
+        .from('post')
+        .select('id')
+        .eq('user_id', user.id);
+
+      if (postsQueryError) {
+        throw new Error(`Failed to query user posts: ${postsQueryError.message}`);
+      }
+
+      if (userPosts && userPosts.length > 0) {
+        const postIds = userPosts.map((post) => post.id);
+        const { error: photosError } = await supabase.from('photo').delete().in('post_id', postIds);
+
+        if (photosError) {
+          throw new Error(`Failed to delete user photos: ${photosError.message}`);
+        }
+      }
+
+      const { error: postsError } = await supabase.from('post').delete().eq('user_id', user.id);
+
+      if (postsError) {
+        throw new Error(`Failed to delete user posts: ${postsError.message}`);
+      }
+
+      const { data, error } = await supabase
+        .from('user')
+        .delete()
+        .eq('id', user.id)
+        .select()
+        .single();
+
+      if (error) {
+        throw new Error(`Failed to delete user: ${error.message}`);
+      }
+
+      return data;
+    } catch (error) {
+      throw new Error(
+        `Failed to delete user and all related data: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
-
-    return data;
   }
 
   async invalidateToken(token: string): Promise<void> {
