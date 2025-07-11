@@ -4,18 +4,17 @@ import { getUserFromJWT } from '@/utils/auth/tokenAuth';
 import { SbLikesRepository } from '@/(backend)/likes/infrastructure/repositories/SbLikesRepository';
 import { PostLikesUseCase } from '@/(backend)/likes/application/usecases/PostLikesUsecase';
 
-export async function POST(req: Request) {
+export async function POST(req: Request, { params }: { params: { id: string } }) {
   try {
-    // 사용자 인증 확인
     const user = await getUserFromJWT();
     if (!user) {
       return NextResponse.json({ success: false, message: '인증이 필요합니다.' }, { status: 401 });
     }
 
-    const { postId } = await req.json();
-    if (!postId) {
+    const postId = parseInt(params.id);
+    if (isNaN(postId)) {
       return NextResponse.json(
-        { success: false, message: 'postId가 필요합니다.' },
+        { success: false, message: '유효하지 않은 게시물 ID입니다.' },
         { status: 400 },
       );
     }
@@ -33,26 +32,24 @@ export async function POST(req: Request) {
 }
 
 //좋아요 개수 조회
-export async function GET(req: Request) {
+export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
     const user = await getUserFromJWT();
     if (!user) {
       return NextResponse.json({ success: false, message: '인증이 필요합니다.' }, { status: 401 });
     }
 
-    const { searchParams } = new URL(req.url);
-    const postId = searchParams.get('postId');
-
-    if (!postId) {
+    const postId = parseInt(params.id);
+    if (isNaN(postId)) {
       return NextResponse.json(
-        { success: false, message: 'postId가 필요합니다.' },
+        { success: false, message: '유효하지 않은 게시물 ID입니다.' },
         { status: 400 },
       );
     }
 
     const likesRepository = new SbLikesRepository();
-    const isLiked = await likesRepository.checkLikeExists(user.id, parseInt(postId));
-    const likeCount = await likesRepository.getLikeCount(parseInt(postId));
+    const isLiked = await likesRepository.checkLikeExists(user.id, postId);
+    const likeCount = await likesRepository.getLikeCount(postId);
 
     return NextResponse.json({
       success: true,
