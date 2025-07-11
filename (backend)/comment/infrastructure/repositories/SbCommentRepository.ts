@@ -51,15 +51,26 @@ class SbCommentRepository implements ICommentRepository {
     return roots;
   }
   async deleteById(commentId: number, userId: number): Promise<boolean> {
-    // "내가 쓴 댓글만" 삭제
+    // 내가 쓴 댓글인지 먼저 확인
+    const { data: parent, error: fetchError } = await this.supabase
+      .from('comment')
+      .select('id')
+      .eq('id', commentId)
+      .eq('user_id', userId)
+      .single();
+
+    if (fetchError || !parent) {
+      throw new Error('댓글이 존재하지 않거나 권한이 없습니다.');
+    }
+
+    // 댓글 + 대댓글 삭제
     const { error } = await this.supabase
       .from('comment')
       .delete()
-      .match({ id: commentId, user_id: userId });
+      .or(`id.eq.${commentId},parent_id.eq.${commentId}`);
 
     if (error) {
-      console.error('데이터베이스 오류입니다.', error);
-      throw new Error(`삭제에 실패했습니다. ${error.message}`);
+      throw new Error(`댓글 삭제 실패: ${error.message}`);
     }
     return true;
   }
