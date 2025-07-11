@@ -81,9 +81,10 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
+
     if (!id) {
       return NextResponse.json({ message: '게시글 ID는 필수입니다.' }, { status: 400 });
     }
