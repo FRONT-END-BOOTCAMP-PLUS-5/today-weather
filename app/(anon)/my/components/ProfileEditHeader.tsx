@@ -14,11 +14,13 @@ const ProfileEditHeader = ({ profilePicture, userName }: ProfileEditHeaderProps)
     // Add your edit logic here
   };
 
-  return (
-    <div className="w-full h-[210px] bg-white inline-flex flex-col justify-center items-center gap-9px">
+  return profilePicture ? (
+    <div className="w-full h-[210px] box-border bg-white flex flex-col justify-center items-center gap-[9px] pt-[30.5px] pb-[30.5px]">
       <ProfilePicEdit profilePicture={profilePicture} onClick={handleEditClick} />
       <ProfileNameEdit userName={userName} />
     </div>
+  ) : (
+    <div className="w-full h-[210px] box-border bg-white flex flex-col justify-center items-center gap-[9px] pt-[30.5px] pb-[30.5px]" />
   );
 };
 
