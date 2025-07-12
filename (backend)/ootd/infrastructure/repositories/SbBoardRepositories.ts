@@ -5,9 +5,12 @@ import IBoardRepository from '../../domain/repositories/IBoradRepository';
 class SbBoardRepository implements IBoardRepository {
   constructor(private readonly supabase: SupabaseClient) {}
 
-  // 게시글 조회
+  // 게시글 조회 (최신순 정렬)
   async getAll(): Promise<Board[]> {
-    const { data, error } = await this.supabase.from('post').select(`*, photos:photo(img_url)`);
+    const { data, error } = await this.supabase
+      .from('post')
+      .select(`*, photos:photo(img_url), user:user_id(id, name, profile_img)`)
+      .order('date_created', { ascending: false });
     if (error) throw error;
     return data;
   }
@@ -16,7 +19,7 @@ class SbBoardRepository implements IBoardRepository {
   async getById(id: string): Promise<Board | null> {
     const { data, error } = await this.supabase
       .from('post')
-      .select(`*, photos:photo(img_url)`)
+      .select(`*, photos:photo(img_url), user:user_id(id, name, profile_img)`)
       .eq('id', id)
       .single();
     if (error) throw error;
@@ -31,7 +34,7 @@ class SbBoardRepository implements IBoardRepository {
     }
     console.log('성공적으로 게시글 생성:', data);
 
-    // 2. 이미지들 저장 (있는 경우)
+    // 이미지 저장 (있는 경우)
     if (img_url && Array.isArray(img_url) && img_url.length > 0) {
       const photoData = img_url.map((imgUrl) => ({
         post_id: data.id,
@@ -45,10 +48,10 @@ class SbBoardRepository implements IBoardRepository {
       console.log('Successfully saved photos for board:', data.id);
     }
 
-    // 3. 생성된 게시글과 이미지를 함께 조회
+    // 게시글과 이미지를 함께 조회
     const { data: fullData, error: fetchError } = await this.supabase
       .from('post')
-      .select(`*, photos:photo(img_url)`)
+      .select(`*, photos:photo(img_url), user:user_id(id, name, profile_img)`)
       .eq('id', data.id)
       .single();
     if (fetchError) {
@@ -65,7 +68,7 @@ class SbBoardRepository implements IBoardRepository {
       .update({ text: updateData.text })
       .eq('id', id);
     if (error) throw error;
-    // 변경 사항 출력
+
     const { data: updated, error: selectError } = await this.supabase
       .from('post')
       .select('*')
@@ -102,6 +105,34 @@ class SbBoardRepository implements IBoardRepository {
       console.error('삭제 실패:', error);
       throw error;
     }
+  }
+
+  // 계절별 게시글 조회 (최신순 정렬)
+  async getBySeason(season: string): Promise<Board[]> {
+    const { data, error } = await this.supabase
+      .from('post')
+      .select(`*, photos:photo(img_url), user:user_id(id, name, profile_img)`)
+      .order('date_created', { ascending: false });
+    if (error) throw error;
+
+    // 생성 날짜 기준으로 계절 필터링
+    return data.filter((post) => {
+      const createdDate = new Date(post.date_created);
+      const createdMonth = createdDate.getMonth() + 1;
+
+      let postSeason: string;
+      if (createdMonth >= 3 && createdMonth <= 5) {
+        postSeason = '봄';
+      } else if (createdMonth >= 6 && createdMonth <= 8) {
+        postSeason = '여름';
+      } else if (createdMonth >= 9 && createdMonth <= 11) {
+        postSeason = '가을';
+      } else {
+        postSeason = '겨울';
+      }
+
+      return postSeason === season;
+    });
   }
 }
 
