@@ -4,7 +4,6 @@ import SbBoardRepository from '@/(backend)/ootd/infrastructure/repositories/SbBo
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { NextRequest, NextResponse } from 'next/server';
 import UpdateUseCase from '@/(backend)/ootd/application/usecases/UpdateUseCase';
-import SeasonUseCase from '@/(backend)/ootd/application/usecases/SeasonUseCase';
 import DeleteUseCase from '@/(backend)/ootd/application/usecases/DeleteUseCase';
 
 /* 게시글 작성 */
@@ -15,7 +14,7 @@ export async function POST(req: NextRequest) {
     const createUseCase = new CreateUseCase(repository);
 
     const body = await req.json();
-    const { text, feels_like, user_id, img_url } = body;
+    const { text, feels_like, user_id, season, img_url } = body;
 
     // img_url이 문자열이면 배열로 변환
     const imgUrls = img_url ? (Array.isArray(img_url) ? img_url : [img_url]) : [];
@@ -25,6 +24,7 @@ export async function POST(req: NextRequest) {
         text,
         feels_like,
         user_id,
+        season,
       },
       imgUrls,
     );
@@ -37,41 +37,17 @@ export async function POST(req: NextRequest) {
 }
 
 /* 게시글 조회 */
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const supabaseClient = supabase;
     const repository = new SbBoardRepository(supabaseClient);
     const getPostUseCase = new GetPostUseCase(repository);
-    const seasonUseCase = new SeasonUseCase(repository);
 
-    const { searchParams } = new URL(req.url);
-    const season = searchParams.get('season');
-
-    console.log('🔍 Season parameter:', season);
-
-    let posts;
-
-    // 빈 파라미터나 null 체크 강화
-    if (season && season.trim() !== '' && season !== 'null' && season !== 'undefined') {
-      // 계절별 필터
-      const validSeasons = ['봄', '여름', '가을', '겨울'];
-      if (!validSeasons.includes(season)) {
-        return NextResponse.json(
-          { message: '계절은 봄, 여름, 가을, 겨울 중 하나여야 합니다.' },
-          { status: 400 },
-        );
-      }
-      console.log('계절별 게시글 조회', season);
-      posts = await seasonUseCase.getPostsBySeason(season);
-    } else {
-      // 전체 게시글
-      console.log('전체 게시글 조회');
-      posts = await getPostUseCase.getAllPosts();
-    }
+    const posts = await getPostUseCase.getAllPosts();
 
     return NextResponse.json(posts, { status: 200 });
   } catch (error) {
-    console.error('게시글 조회 실패', error);
+    console.error('Error fetching posts:', error);
     return NextResponse.json(
       { message: '게시글 조회 실패', error: 'FETCH_ERROR' },
       { status: 500 },
@@ -105,25 +81,22 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-/* 게시글 삭제 */
 export async function DELETE(req: NextRequest) {
   try {
-    const supabaseClient = supabase;
-    const repository = new SbBoardRepository(supabaseClient);
-    const deleteUseCase = new DeleteUseCase(repository);
-
-    const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id');
+    const segments = req.nextUrl.pathname.split('/');
+    const id = segments[segments.length - 1];
 
     if (!id) {
       return NextResponse.json({ message: '게시글 ID는 필수입니다.' }, { status: 400 });
     }
 
+    const repository = new SbBoardRepository(supabase);
+    const deleteUseCase = new DeleteUseCase(repository);
     await deleteUseCase.execute(id);
 
     return NextResponse.json({ message: '게시글이 삭제되었습니다.' }, { status: 200 });
   } catch (error) {
-    console.error('Error deleting board:', error);
+    console.error('게시글 삭제 실패', error);
     return NextResponse.json(
       { message: '게시글 삭제 실패', error: 'DELETE_ERROR' },
       { status: 500 },
