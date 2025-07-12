@@ -81,25 +81,22 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-/* 게시글 삭제 */
 export async function DELETE(req: NextRequest) {
   try {
-    const supabaseClient = supabase;
-    const repository = new SbBoardRepository(supabaseClient);
-    const deleteUseCase = new DeleteUseCase(repository);
-
-    const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id');
+    const segments = req.nextUrl.pathname.split('/');
+    const id = segments[segments.length - 1];
 
     if (!id) {
       return NextResponse.json({ message: '게시글 ID는 필수입니다.' }, { status: 400 });
     }
 
+    const repository = new SbBoardRepository(supabase);
+    const deleteUseCase = new DeleteUseCase(repository);
     await deleteUseCase.execute(id);
 
     return NextResponse.json({ message: '게시글이 삭제되었습니다.' }, { status: 200 });
   } catch (error) {
-    console.error('Error deleting board:', error);
+    console.error('게시글 삭제 실패', error);
     return NextResponse.json(
       { message: '게시글 삭제 실패', error: 'DELETE_ERROR' },
       { status: 500 },
